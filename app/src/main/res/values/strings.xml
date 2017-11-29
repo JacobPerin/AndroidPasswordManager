@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidPasswordManager</string>
+    <string name="action_search">Search Password Tag</string>
 </resources>
