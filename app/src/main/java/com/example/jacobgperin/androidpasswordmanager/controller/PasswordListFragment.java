@@ -3,8 +3,10 @@ package com.example.jacobgperin.androidpasswordmanager.controller;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -21,11 +23,39 @@ import java.util.List;
  * Created by Jacob G. Perin on 11/28/2017.
  */
 
-public class PasswordListFragment extends Fragment {
+public class PasswordListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private RecyclerView mPasswordRecyclerView;
 
     private PasswordAdapter mPasswordAdapter;
+
+    /*
+       Initialize SearchView, and use f/ RecyclerView to filter data tags
+     */
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        //TODO :: Filter Logic
+        return false;
+    }
+
+    /*
+        Create RecyclerView w/ holder for each password
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +71,9 @@ public class PasswordListFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Helper method to initialize super adapter for password
+     */
     private void updateUI() {
 
         PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
