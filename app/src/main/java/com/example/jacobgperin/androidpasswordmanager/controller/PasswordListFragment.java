@@ -120,15 +120,17 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
     public void onResume(){
         super.onResume();
 
+        // Retrieve data from singleton class
+        PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
+        List<Password> passwords = passwordDataSource.getPasswords();
+
         // Update RecyclerView if adapter has been updated
-        if(mPasswordAdapter != null){
-            // Retrieve data from singleton class
-            PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
-            List<Password> passwords = passwordDataSource.getPasswords();
+        if(mPasswordAdapter != null && !passwords.isEmpty()){
 
             mPasswordAdapter.add(passwords.get(passwords.size() - 1));
             mPasswordAdapter.notifyDataSetChanged();
         }
+
     }
 
 
