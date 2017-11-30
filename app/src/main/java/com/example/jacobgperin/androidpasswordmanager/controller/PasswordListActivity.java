@@ -24,6 +24,7 @@ public class PasswordListActivity extends SingleFragmentActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
@@ -41,7 +42,7 @@ public class PasswordListActivity extends SingleFragmentActivity{
                 startActivityForResult(addIntent, ADD_PASSWORD);
                 return true;
             case R.id.action_preferences :
-                Intent intent = new Intent(this, android.preference.PreferenceActivity.class);
+                Intent intent = new Intent(this,PrefActivity.class);
                 startActivityForResult(intent, PREFERENCE);
                 return true;
             default:
@@ -59,13 +60,13 @@ public class PasswordListActivity extends SingleFragmentActivity{
                 break;
             case PREFERENCE:
                 if(requestCode == 1) {
-                    getPreferenceValues();
                 }
                 break;
             default:
                 break;
         }
     }
+
 
     private void getPreferenceValues() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
