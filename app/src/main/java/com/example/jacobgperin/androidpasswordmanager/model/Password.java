@@ -1,6 +1,5 @@
-package com.example.jacobgperin.androidpasswordmanager.Model;
+package com.example.jacobgperin.androidpasswordmanager.model;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.UUID;
 

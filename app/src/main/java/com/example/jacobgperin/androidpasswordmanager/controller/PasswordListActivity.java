@@ -1,4 +1,4 @@
-package com.example.jacobgperin.androidpasswordmanager.Controller;
+package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.support.v4.app.Fragment;
 

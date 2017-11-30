@@ -1,4 +1,4 @@
-package com.example.jacobgperin.androidpasswordmanager.Controller;
+package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.support.v4.app.Fragment;
 import android.view.Menu;
@@ -14,6 +14,6 @@ public class MainActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return new PasswordListFragment();
+        return new PasswordFragment();
     }
 }

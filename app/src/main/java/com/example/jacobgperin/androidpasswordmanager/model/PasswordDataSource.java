@@ -1,4 +1,4 @@
-package com.example.jacobgperin.androidpasswordmanager.Model;
+package com.example.jacobgperin.androidpasswordmanager.model;
 
 import android.content.Context;
 
@@ -42,6 +42,8 @@ public class PasswordDataSource {
             // Set w/ dummy data
             password.setmTags(tags);
             password.setmPassword(randomString(10));
+
+            mPasswords.add(password);
         }
 
     }
