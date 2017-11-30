@@ -40,20 +40,24 @@ public class PasswordDataSource {
 
         // FIXME :: filled w/ dummy data until database is set up IN this file (Chapter 14)
 
-//        for(int i = 0; i < 20; i++){
-//            Password password = new Password();
-//
-//            // Generate some tags
-//            ArrayList<String> tags = new ArrayList<>();
-//
-//            for(int j = 0; j < 5; j++){
-//                tags.add(randomString(5));
-//            }
-//
-//            // Set w/ dummy data
-//            password.setmTags(tags);
-//            password.setmPassword(randomString(10));
-//        }
+        for(int i = 0; i < 20; i++){
+            Password password = new Password();
+
+            // Generate some tags
+            ArrayList<PasswordTag> tags = new ArrayList<>();
+
+            for(int j = 0; j < 5; j++){
+                PasswordTag tag = new PasswordTag();
+                tag.setPassword(randomString(5));
+                tags.add(tag);
+            }
+
+            // Set w/ dummy data
+            password.setmTags(tags);
+            password.setmPassword(randomString(10));
+
+            mPasswords.add(password);
+        }
 
     }
 
@@ -85,7 +89,7 @@ public class PasswordDataSource {
 
         values.clear();
         for(int i = 0; i < password.getmTags().size(); i++){
-            values = getTagContentValues(password.getmTags().get(i), password.getId().toString());
+            values = getTagContentValues(password.getmTagsObject().get(i), password.getId().toString());
             mDatabase.insert(TagTable.NAME, null, values);
         }
     }

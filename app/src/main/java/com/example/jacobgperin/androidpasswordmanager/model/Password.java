@@ -33,7 +33,15 @@ public class Password {
         mPassword = password;
     }
 
-    public ArrayList<PasswordTag> getmTags() {
+    public ArrayList<String> getmTags() {
+        ArrayList<String> stringTag = new ArrayList<>();
+        for(int i = 0; i < mTags.size(); i++){
+            stringTag.add(mTags.get(i).getName());
+        }
+        return stringTag;
+    }
+
+    public ArrayList<PasswordTag> getmTagsObject() {
         return mTags;
     }
 
