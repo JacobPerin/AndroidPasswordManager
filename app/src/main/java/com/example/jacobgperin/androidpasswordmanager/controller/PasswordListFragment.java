@@ -32,7 +32,7 @@ import java.util.List;
 public class PasswordListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
 
-    private static SearchView searchView;
+    private static SearchView mSearchView;
     /*
        Initialize SearchView, and use f/ RecyclerView to filter data tags
      */
@@ -41,8 +41,8 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         super.onCreateOptionsMenu(menu, inflater);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) searchItem.getActionView();
-        searchView.setOnQueryTextListener(this);
+        mSearchView = (SearchView) searchItem.getActionView();
+        mSearchView.setOnQueryTextListener(this);
     }
 
     @Override
@@ -114,6 +114,21 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         mBinding.passwordRecyclerView.setAdapter(mPasswordAdapter);
 
         mPasswordAdapter.add(passwords);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        // Update RecyclerView if adapter has been updated
+        if(mPasswordAdapter != null){
+            // Retrieve data from singleton class
+            PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
+            List<Password> passwords = passwordDataSource.getPasswords();
+
+            mPasswordAdapter.add(passwords.get(passwords.size() - 1));
+            mPasswordAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -222,8 +237,6 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             final ListItemPasswordBinding binding = ListItemPasswordBinding.inflate(layoutInflater, parent, false );
             return new PasswordHolder(binding);
-
-
         }
 
         private Comparator<Password> mComparator;

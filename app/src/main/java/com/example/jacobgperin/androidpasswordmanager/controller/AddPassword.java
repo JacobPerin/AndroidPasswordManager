@@ -46,10 +46,12 @@ public class AddPassword extends AppCompatActivity {
 
                 pass.setmTags(passwordTags);
 
-
+                // Add password to list and database
                 data.addPassword(pass);
+                data.addPasswordList(pass);
 
-                //TODO :: add intent and update list
+                // Go back to main activity
+                finish();
             }
         });
     }

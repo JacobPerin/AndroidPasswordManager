@@ -60,8 +60,14 @@ public class PasswordDataSource {
     /**
      * ***END :: REMOVE THIS ONCE DATABASE IS DONE***
      */
+    public void addPasswordList(Password password) {
+        // Add password to the password list
+        mPasswords.add(password);
+    }
 
     public void addPassword(Password password){
+
+        // Add password to the database
         ContentValues values = getPasswordContentValues(password);
         mDatabase.insert(PasswordTable.NAME, null, values);
 
