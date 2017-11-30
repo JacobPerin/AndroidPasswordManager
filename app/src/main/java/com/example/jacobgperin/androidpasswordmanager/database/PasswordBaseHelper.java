@@ -1,26 +1,46 @@
-package com.example.jacobgperin.androidpasswordmanager.model;
+package com.example.jacobgperin.androidpasswordmanager.database;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.jacobgperin.androidpasswordmanager.model.Password;
+
+import static com.example.jacobgperin.androidpasswordmanager.database.PasswordDBSchema.*;
 
 /**
  * Created by colli on 11/29/2017.
  */
 
 public class PasswordBaseHelper extends SQLiteOpenHelper{
-    static final String dbName = "PasswordManager";
-    static final String passwordTable = "passwords";
-    static final String colID = "passID";
-    static final String colPass = "password";
+    private static final String DBNAME = "PasswordManager";
+    private static final int VERSION = 1;
 
-    static final String tagsTable = "tags";
-    static final String colTagID = "tagID";
-    static final String colTagName = "tagName";
-
-    public PasswordBaseHelper()
+    public PasswordBaseHelper(Context context){
+        super(context, DBNAME, null, VERSION);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db){
+        db.execSQL("create table " + PasswordTable.NAME + "(" +
+                PasswordTable.Columns.UUID + " integer primary key, " +
+                PasswordTable.Columns.PASSWORD +
+                ")"
+        );
+
+        db.execSQL("CREATE TABLE " + TagTable.NAME + "(" +
+                TagTable.Columns.UUID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TagTable.Columns.TAG + ", " +
+                TagTable.Columns.TAGID + " INTEGER NOT NULL, " +
+                "FOREIGN KEY (" + TagTable.Columns.TAGID +
+                ") REFERENCES " + PasswordTable.NAME +
+                " (" + PasswordTable.Columns.UUID + ")" +
+                ")"
+        );
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 
     }
 }

@@ -1,4 +1,4 @@
-package com.example.jacobgperin.androidpasswordmanager.Controller;
+package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
 
-import com.example.jacobgperin.androidpasswordmanager.Model.Password;
-import com.example.jacobgperin.androidpasswordmanager.Model.PasswordDataSource;
+import com.example.jacobgperin.androidpasswordmanager.model.Password;
+import com.example.jacobgperin.androidpasswordmanager.model.PasswordDataSource;
 import com.example.jacobgperin.androidpasswordmanager.R;
 
 import java.util.List;

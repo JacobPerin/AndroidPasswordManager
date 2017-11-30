@@ -1,4 +1,4 @@
-package com.example.jacobgperin.androidpasswordmanager.Controller;
+package com.example.jacobgperin.androidpasswordmanager.controller;
 
 /**
  * Created by Jacob G. Perin on 11/28/2017.

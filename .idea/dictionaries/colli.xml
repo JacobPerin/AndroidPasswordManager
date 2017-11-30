@@ -2,6 +2,7 @@
   <dictionary name="colli">
     <words>
       <w>dbname</w>
+      <w>tagid</w>
     </words>
   </dictionary>
 </component>

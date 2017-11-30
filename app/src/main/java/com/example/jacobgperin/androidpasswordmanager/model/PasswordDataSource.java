@@ -1,4 +1,4 @@
-package com.example.jacobgperin.androidpasswordmanager.Model;
+package com.example.jacobgperin.androidpasswordmanager.model;
 
 import android.content.Context;
 
