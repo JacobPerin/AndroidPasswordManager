@@ -23,7 +23,7 @@ import static com.example.jacobgperin.androidpasswordmanager.database.PasswordDB
 public class PasswordDataSource {
     private static PasswordDataSource mPasswordDataSource;
 
-    private List<Password> mPasswords;
+    private ArrayList<Password> mPasswords;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -39,8 +39,7 @@ public class PasswordDataSource {
         mContext = context.getApplicationContext();
         mDatabase = new PasswordBaseHelper(mContext).getWritableDatabase();
         mPasswords = new ArrayList<>();
-
-
+        mPasswords = makeQueries(null, null, mPasswords);
     }
 
     /**
@@ -57,10 +56,11 @@ public class PasswordDataSource {
         return sb.toString();
     }
 
-    /**
-     * ***END :: REMOVE THIS ONCE DATABASE IS DONE***
-     */
 
+    /**
+     * Add a new password to the DB and passwords array list
+     * @param password
+     */
     public void addPassword(Password password){
         ContentValues values = getPasswordContentValues(password);
         mDatabase.insert(PasswordTable.NAME, null, values);
@@ -74,7 +74,12 @@ public class PasswordDataSource {
         mPasswords.add(password);
     }
 
+    /**
+     * Make an update to a password in the DB
+     * @param password
+     */
     public void updatePassword(Password password){
+
         String id = password.getId().toString();
         ContentValues values = getPasswordContentValues(password);
 
@@ -85,25 +90,37 @@ public class PasswordDataSource {
         values.clear();
     }
 
+    /**
+     * This function retrieves a single password.
+     * @param id
+     * @return
+     */
     public Password getPassword(UUID id) {
-        String selection =PasswordTable.Columns.UUID + " = ?";
-        String[] selectionArgs = { id.toString() };
-
-        ArrayList<Password> passwords = new ArrayList<>();
-        passwords = makeQueries(selection, selectionArgs, passwords);
-
-        return passwords.get(0);
+        for(int i = 0; i < mPasswords.size(); i++){
+            if(mPasswords.get(i).getId() == id)
+                return mPasswords.get(i);
+        }
+        return null;
     }
 
-    //Gets the passwords into arrayList of Passwords
+    /**
+     * Get the passwords
+     * @return
+     */
     public List<Password> getPasswords(){
-        ArrayList<Password> passwords = new ArrayList<>();
-        passwords = makeQueries(null, null, passwords);
-
-        return passwords;
+        return mPasswords;
     }
 
 
+    /**
+     * This functions executes queries using the cursor Wrapper
+     * and returns a list of passwords from the DB
+     * based on the where clause.
+     * @param whereClause
+     * @param whereArgs
+     * @param passwords
+     * @return
+     */
     public ArrayList<Password> makeQueries(String whereClause, String[] whereArgs, ArrayList<Password> passwords){
         //Create password table cursor
         PasswordCursorWrapper passCursor = queryPasswords(whereClause, whereArgs);
@@ -135,6 +152,14 @@ public class PasswordDataSource {
 
         return passwords;
     }
+
+    /**
+     *  Return passwords from TagTable.
+     * Number of Tags returned based on where clause.
+     * Return Cursor wrapper.
+     * @param id
+     * @return
+     */
     private PasswordCursorWrapper queryTags(String id){
         String selection = TagTable.Columns.TAGID + " = ?";
         String[] selectionArgs = { id };
@@ -151,6 +176,14 @@ public class PasswordDataSource {
         return new PasswordCursorWrapper(cursor);
     }
 
+    /**
+     * Return passwords from PasswordTable.
+     * Number of passwords returned based on where clause.
+     * Return Cursor wrapper.
+     * @param whereClause
+     * @param whereArgs
+     * @return
+     */
     private PasswordCursorWrapper queryPasswords(String whereClause, String[] whereArgs){
         Cursor cursor = mDatabase.query(
                 PasswordTable.NAME,
@@ -165,6 +198,11 @@ public class PasswordDataSource {
         return new PasswordCursorWrapper(cursor);
     }
 
+    /**
+     * This function creates Content Values object for PasswordDB
+     * @param password
+     * @return
+     */
     private static ContentValues getPasswordContentValues(Password password){
         ContentValues values = new ContentValues();
         values.put(PasswordTable.Columns.UUID, password.getId().toString());
@@ -173,6 +211,12 @@ public class PasswordDataSource {
         return values;
     }
 
+    /**
+     * This function creates Content Values object for TagDB
+     * @param tag
+     * @param id
+     * @return
+     */
     private static ContentValues getTagContentValues(PasswordTag tag, String id){
         ContentValues values = new ContentValues();
 

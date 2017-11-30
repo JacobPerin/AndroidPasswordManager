@@ -10,30 +10,24 @@ import android.view.Menu;
 
 import com.example.jacobgperin.androidpasswordmanager.R;
 
-public class PreferenceActivity extends ActionBarActivity {
+public class PreferenceActivity extends android.preference.PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar action = getSupportActionBar();
-        action.setDisplayHomeAsUpEnabled(true);
-
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content,
-                        new PreferenceFrag()).commit();
+        addPreferencesFromResource(R.xml.pref);
+//        getFragmentManager().beginTransaction()
+//                .replace(android.R.id.content,
+//                        new PreferenceFrag()).commit();
     }
+//
+//    public static class PreferenceFrag extends PreferenceFragment {
+//        @Override
+//        public void onCreate(Bundle savedInstanceState){
+//            super.onCreate(savedInstanceState);
+//            addPreferencesFromResource(R.xml.pref);
+//        }
+//    }
 
-    public static class PreferenceFrag extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState){
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu)
-    }
 }
