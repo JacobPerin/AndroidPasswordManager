@@ -53,9 +53,7 @@ public class PasswordListFragment extends Fragment {
     private class PasswordHolder extends RecyclerView.ViewHolder {
 
         private Password mPassword;
-
         private TextView mPasswordView;
-        //TODO
         private GridView mTagsView;
 
         public PasswordHolder(LayoutInflater inflater, ViewGroup parent) {
