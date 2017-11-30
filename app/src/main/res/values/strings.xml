@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">AndroidPasswordManager</string>
     <string name="action_search">Search Password Tag</string>
+    <string name="action_new">Add Password</string>
+    <string name="action_preferences">Preferences</string>
+    <string name="action_options">Options</string>
 </resources>
