@@ -2,6 +2,7 @@ package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,10 +15,16 @@ import com.example.jacobgperin.androidpasswordmanager.R;
 
 public class PasswordListActivity extends SingleFragmentActivity{
 
+    private SearchView mSearchView;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView) searchItem.getActionView();
+
         return true;
     }
 
