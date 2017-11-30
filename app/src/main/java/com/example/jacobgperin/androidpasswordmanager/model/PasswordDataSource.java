@@ -2,9 +2,11 @@ package com.example.jacobgperin.androidpasswordmanager.model;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.jacobgperin.androidpasswordmanager.database.PasswordBaseHelper;
+import com.example.jacobgperin.androidpasswordmanager.database.PasswordCursorWrapper;
 import com.example.jacobgperin.androidpasswordmanager.database.PasswordDBSchema;
 
 import java.security.SecureRandom;
@@ -38,26 +40,31 @@ public class PasswordDataSource {
         mDatabase = new PasswordBaseHelper(mContext).getWritableDatabase();
         mPasswords = new ArrayList<>();
 
+        Password pass = new Password();
+        pass.setmPassword("JAKEISLAME");
+        PasswordTag tag = new PasswordTag();
+        tag.setmTagID(pass.getId());
+        mPasswords = getPasswords();
         // FIXME :: filled w/ dummy data until database is set up IN this file (Chapter 14)
 
-        for(int i = 0; i < 20; i++){
-            Password password = new Password();
-
-            // Generate some tags
-            ArrayList<PasswordTag> tags = new ArrayList<>();
-
-            for(int j = 0; j < 5; j++){
-                PasswordTag tag = new PasswordTag();
-                tag.setPassword(randomString(5));
-                tags.add(tag);
-            }
-
-            // Set w/ dummy data
-            password.setmTags(tags);
-            password.setmPassword(randomString(10));
-
-            mPasswords.add(password);
-        }
+//        for(int i = 0; i < 20; i++){
+//            Password password = new Password();
+//
+//            // Generate some tags
+//            ArrayList<PasswordTag> tags = new ArrayList<>();
+//
+//            for(int j = 0; j < 5; j++){
+//                PasswordTag tag = new PasswordTag();
+//                tag.setName(randomString(5));
+//                tags.add(tag);
+//            }
+//
+//            // Set w/ dummy data
+//            password.setmTags(tags);
+//            password.setmPassword(randomString(10));
+//
+//            mPasswords.add(password);
+//        }
 
     }
 
@@ -78,10 +85,6 @@ public class PasswordDataSource {
     /**
      * ***END :: REMOVE THIS ONCE DATABASE IS DONE***
      */
-
-    public List<Password> getPasswords(){
-        return mPasswords;
-    }
 
     public void addPassword(Password password){
         ContentValues values = getPasswordContentValues(password);
@@ -112,6 +115,64 @@ public class PasswordDataSource {
             }
         }
         return null;
+    }
+
+    //Gets the passwords into arrayList of Passwords
+    public List<Password> getPasswords(){
+        List<Password> passwords = new ArrayList<>();
+
+        //Create password table cursor
+        PasswordCursorWrapper passCursor = queryPasswords(null, null);
+
+
+        try{
+            passCursor.moveToFirst();
+            //Parse through cursor and create password objects
+            while(!passCursor.isAfterLast()){
+                Password pass = passCursor.getPassword();
+
+                PasswordCursorWrapper tagCursor = queryTags(pass.getId().toString());
+                ArrayList<PasswordTag> tagList = new ArrayList<>();
+                tagCursor.moveToFirst();
+                //Parse through TagTable and get tags connected to current Password
+                while(!tagCursor.isAfterLast()){
+                    tagList.add(tagCursor.getTag());
+                    tagCursor.moveToNext();
+                }
+                tagCursor.close();
+
+                pass.setmTags(tagList);
+                passwords.add(pass);
+                passCursor.moveToNext();
+            }
+        }
+        finally {
+            passCursor.close();
+        }
+
+        return passwords;
+    }
+
+    private PasswordCursorWrapper queryTags(String id){
+        String query = "SELECT * FROM " + TagTable.NAME +
+                " WHERE " + TagTable.Columns.TAGID + " = " + id;
+        Cursor cursor = mDatabase.rawQuery(query, null);
+
+        return new PasswordCursorWrapper(cursor);
+    }
+
+    private PasswordCursorWrapper queryPasswords(String whereClause, String[] whereArgs){
+        Cursor cursor = mDatabase.query(
+                PasswordTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+
+        return new PasswordCursorWrapper(cursor);
     }
 
     private static ContentValues getPasswordContentValues(Password password){

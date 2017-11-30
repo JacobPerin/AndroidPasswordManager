@@ -8,14 +8,22 @@ import java.util.UUID;
 
 public class PasswordTag {
     private UUID mID;
-    /**
-     *
-     */
     private String mName;
+    private UUID mTagID;
 
     public PasswordTag() {
-        mID = UUID.randomUUID();
+        this(UUID.randomUUID());
     }
+
+    public PasswordTag(UUID id){
+        mID = id;
+    }
+
+    public void setmTagID(UUID id){
+        mTagID = id;
+    }
+
+    public UUID getmTagID(){ return mTagID; }
 
     public UUID getId() {
         return mID;
@@ -24,7 +32,8 @@ public class PasswordTag {
     public String getName() {
         return mName;
     }
-    public void setPassword(String name){
+
+    public void setName(String name){
         mName = name;
     }
 }
