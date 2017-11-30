@@ -1,6 +1,7 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -136,6 +137,27 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
 
     private class PasswordHolder extends RecyclerView.ViewHolder {
+
+        final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
+            public void onLongPress(MotionEvent e) {
+                //Open up new screen w/ more information
+                Intent intent = PasswordActivity.newIntent(getActivity(), mPassword.getId());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                //TODO :: show password
+                return super.onSingleTapConfirmed(e);
+            }
+        });
+
+
+
+        public boolean onTouchEvent(MotionEvent event){
+            return gestureDetector.onTouchEvent(event);
+        };
+
 
         private Password mPassword;
         private final ListItemPasswordBinding mBinding;
