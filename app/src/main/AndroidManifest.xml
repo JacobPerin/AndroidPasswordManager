@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.MainActivity" />
-        <activity android:name=".controller.AddPassword"></activity>
+        <activity android:name=".controller.AddPassword" />
+        <activity android:name=".controller.PreferenceActivity"></activity>
     </application>
 
 </manifest>

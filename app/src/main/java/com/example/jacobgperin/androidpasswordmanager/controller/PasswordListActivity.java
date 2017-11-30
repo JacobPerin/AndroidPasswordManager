@@ -1,6 +1,9 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.*;
+import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
@@ -15,6 +18,8 @@ import com.example.jacobgperin.androidpasswordmanager.R;
 
 public class PasswordListActivity extends SingleFragmentActivity{
 
+    private static final int ADD_PASSWORD = 1;
+    private static final int PREFERENCE = 2;
     private SearchView mSearchView;
 
     @Override
@@ -33,13 +38,40 @@ public class PasswordListActivity extends SingleFragmentActivity{
         switch (item.getItemId()) {
             case R.id.action_new :
                 Intent addIntent = new Intent(this, AddPassword.class);
-                startActivity(addIntent);
+                startActivityForResult(addIntent, ADD_PASSWORD);
                 return true;
             case R.id.action_preferences :
-                //TODO
+                Intent intent = new Intent(this, android.preference.PreferenceActivity.class);
+                startActivityForResult(intent, PREFERENCE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch(requestCode) {
+            case ADD_PASSWORD:
+                if (requestCode == 1) {
+                    //The password was added successfully
+                }
+                break;
+            case PREFERENCE:
+                if(requestCode == 1) {
+                    getPreferenceValues();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void getPreferenceValues() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean hidden = sharedPref.getBoolean("hidden", false);
+        if (hidden){
+            //Make Passwords hidden
         }
     }
 
