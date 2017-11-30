@@ -20,8 +20,8 @@ public class PasswordCursorWrapper extends CursorWrapper {
     }
 
     public Password getPassword(){
-        UUID uuid = UUID.fromString(getString(getColumnIndex(PasswordTable.Columns.UUID)));
-        String passName = getString(getColumnIndex(PasswordTable.Columns.PASSWORD));
+        UUID uuid = UUID.fromString(this.getString(this.getColumnIndex(PasswordTable.Columns.UUID)));
+        String passName = this.getString(this.getColumnIndex(PasswordTable.Columns.PASSWORD));
 
         Password pass = new Password(uuid);
         pass.setmPassword(passName);
@@ -29,11 +29,10 @@ public class PasswordCursorWrapper extends CursorWrapper {
     }
 
     public PasswordTag getTag (){
-        String tagName = getString(getColumnIndex(TagTable.Columns.TAG));
-        UUID tagID = UUID.fromString(getString(getColumnIndex(TagTable.Columns.TAGID)));
-        UUID uuid = UUID.fromString(getString(getColumnIndex(TagTable.Columns.UUID)));
+        String tagName = this.getString(this.getColumnIndex(TagTable.Columns.TAG));
+        UUID tagID = UUID.fromString(this.getString(this.getColumnIndex(TagTable.Columns.TAGID)));
 
-        PasswordTag passTag = new PasswordTag(uuid);
+        PasswordTag passTag = new PasswordTag();
         passTag.setName(tagName);
         passTag.setmTagID(tagID);
 

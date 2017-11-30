@@ -40,31 +40,6 @@ public class PasswordDataSource {
         mDatabase = new PasswordBaseHelper(mContext).getWritableDatabase();
         mPasswords = new ArrayList<>();
 
-        Password pass = new Password();
-        pass.setmPassword("JAKEISLAME");
-        PasswordTag tag = new PasswordTag();
-        tag.setmTagID(pass.getId());
-        mPasswords = getPasswords();
-        // FIXME :: filled w/ dummy data until database is set up IN this file (Chapter 14)
-
-//        for(int i = 0; i < 20; i++){
-//            Password password = new Password();
-//
-//            // Generate some tags
-//            ArrayList<PasswordTag> tags = new ArrayList<>();
-//
-//            for(int j = 0; j < 5; j++){
-//                PasswordTag tag = new PasswordTag();
-//                tag.setName(randomString(5));
-//                tags.add(tag);
-//            }
-//
-//            // Set w/ dummy data
-//            password.setmTags(tags);
-//            password.setmPassword(randomString(10));
-//
-//            mPasswords.add(password);
-//        }
 
     }
 
@@ -103,7 +78,7 @@ public class PasswordDataSource {
 
         mDatabase.update(PasswordTable.NAME, values,
                 PasswordTable.Columns.UUID + " = ?",
-                new String[] {id});
+                new String[] {id + ""});
 
         values.clear();
     }
@@ -154,9 +129,17 @@ public class PasswordDataSource {
     }
 
     private PasswordCursorWrapper queryTags(String id){
-        String query = "SELECT * FROM " + TagTable.NAME +
-                " WHERE " + TagTable.Columns.TAGID + " = " + id;
-        Cursor cursor = mDatabase.rawQuery(query, null);
+        String selection = TagTable.Columns.TAGID + " = ?";
+        String[] selectionArgs = { id };
+        Cursor cursor = mDatabase.query(
+                TagTable.NAME,
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
 
         return new PasswordCursorWrapper(cursor);
     }
@@ -186,7 +169,6 @@ public class PasswordDataSource {
     private static ContentValues getTagContentValues(PasswordTag tag, String id){
         ContentValues values = new ContentValues();
 
-        values.put(TagTable.Columns.UUID, tag.getId().toString());
         values.put(TagTable.Columns.TAG, tag.getName());
         values.put(TagTable.Columns.TAGID, id);
 

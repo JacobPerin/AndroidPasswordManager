@@ -1,5 +1,6 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +25,8 @@ public class PasswordListActivity extends SingleFragmentActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_new :
-                //TODO
+                Intent addIntent = new Intent(this, AddPassword.class);
+                startActivity(addIntent);
                 return true;
             case R.id.action_preferences :
                 //TODO

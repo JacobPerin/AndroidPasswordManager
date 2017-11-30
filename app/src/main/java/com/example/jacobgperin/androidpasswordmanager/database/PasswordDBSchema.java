@@ -25,8 +25,6 @@ public class PasswordDBSchema {
         public static final String NAME = "tags";
 
         public static final class Columns {
-            //Unique ID for each tag
-            public static final String UUID = "uuid";
             //Tag name
             public static final String TAG = "tag";
             //ID that will link with password table
