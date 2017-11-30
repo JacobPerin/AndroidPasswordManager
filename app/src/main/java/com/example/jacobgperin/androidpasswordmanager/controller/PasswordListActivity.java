@@ -26,13 +26,22 @@ public class PasswordListActivity extends SingleFragmentActivity{
         switch (item.getItemId()) {
             case R.id.action_new :
                 Intent addIntent = new Intent(this, AddPassword.class);
-                startActivity(addIntent);
+                startActivityForResult(addIntent, 1);
                 return true;
             case R.id.action_preferences :
                 //TODO
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == 1){
+            if(requestCode == 1){
+                //The password was added successfully
+            }
         }
     }
 

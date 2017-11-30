@@ -70,6 +70,8 @@ public class PasswordDataSource {
             values = getTagContentValues(password.getmTagsObject().get(i), password.getId().toString());
             mDatabase.insert(TagTable.NAME, null, values);
         }
+
+        mPasswords.add(password);
     }
 
     public void updatePassword(Password password){

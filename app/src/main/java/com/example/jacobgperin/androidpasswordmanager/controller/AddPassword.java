@@ -1,10 +1,12 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.jacobgperin.androidpasswordmanager.R;
 import com.example.jacobgperin.androidpasswordmanager.model.Password;
@@ -31,9 +33,15 @@ public class AddPassword extends AppCompatActivity {
                 EditText tags = (EditText) findViewById(R.id.TagsInput);
 
                 Password pass = new Password();
-                pass.setmPassword(password.getText().toString());
+                String passText = password.getText().toString();
+                pass.setmPassword(passText);
                 ArrayList<PasswordTag> passwordTags = new ArrayList<>();
                 String tagString = tags.getText().toString();
+
+                if(tagString.length() == 0 || passText.length() == 0){
+                    Toast.makeText(getApplicationContext(), "Can not leave Password or tags blank", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String delim = "[,]";
                 String[] tokens = tagString.split(delim);
 
@@ -48,6 +56,8 @@ public class AddPassword extends AppCompatActivity {
 
 
                 data.addPassword(pass);
+
+                finish();
 
                 //TODO :: add intent and update list
             }
