@@ -11,7 +11,7 @@ public class Password {
 
     private UUID mID;
     private String mPassword;
-    private ArrayList<String> mTags;
+    private ArrayList<PasswordTag> mTags;
 
     /**
      * Testing purposes for list view ... RecyclerView w/ Existing Values
@@ -33,11 +33,12 @@ public class Password {
         mPassword = password;
     }
 
-    public ArrayList<String> getmTags() {
+    public ArrayList<PasswordTag> getmTags() {
         return mTags;
     }
 
-    public void setmTags(ArrayList<String> tags) {
+    public void setmTags(ArrayList<PasswordTag> tags) {
         mTags = tags;
     }
 }
+

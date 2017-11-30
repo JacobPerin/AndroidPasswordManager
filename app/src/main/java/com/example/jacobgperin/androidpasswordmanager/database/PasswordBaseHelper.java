@@ -22,14 +22,16 @@ public class PasswordBaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db){
+        //Password table
         db.execSQL("create table " + PasswordTable.NAME + "(" +
                 PasswordTable.Columns.UUID + " integer primary key, " +
                 PasswordTable.Columns.PASSWORD +
                 ")"
         );
 
+        //Create the tag table based on password
         db.execSQL("CREATE TABLE " + TagTable.NAME + "(" +
-                TagTable.Columns.UUID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                TagTable.Columns.UUID + " INTEGER PRIMARY KEY, " +
                 TagTable.Columns.TAG + ", " +
                 TagTable.Columns.TAGID + " INTEGER NOT NULL, " +
                 "FOREIGN KEY (" + TagTable.Columns.TAGID +
