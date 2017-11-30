@@ -47,6 +47,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
     }
 
     @Override
+
     public boolean onQueryTextSubmit(String query) {
         return false;
     }

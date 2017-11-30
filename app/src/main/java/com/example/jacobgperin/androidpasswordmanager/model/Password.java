@@ -18,7 +18,11 @@ public class Password {
      */
     public Password() {
         // Universally unique ID f/ each password
-        mID = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Password(UUID id){
+        mID = id;
     }
 
     public UUID getId() {

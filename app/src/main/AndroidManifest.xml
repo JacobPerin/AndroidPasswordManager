@@ -12,10 +12,12 @@
         <activity android:name=".controller.PasswordListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.MainActivity"></activity>
+        <activity android:name=".controller.MainActivity" />
+        <activity android:name=".controller.AddPassword"></activity>
     </application>
 
 </manifest>
