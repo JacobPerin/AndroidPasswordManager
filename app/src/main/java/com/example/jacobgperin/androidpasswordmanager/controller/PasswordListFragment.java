@@ -31,18 +31,17 @@ import java.util.List;
 
 public class PasswordListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
-    private PasswordAdapter mPasswordAdapter;
 
+    private static SearchView searchView;
     /*
        Initialize SearchView, and use f/ RecyclerView to filter data tags
      */
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(this);
     }
 
@@ -79,6 +78,18 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
     }
 
     public ActivityFragmentBinding mBinding;
+    private PasswordAdapter mPasswordAdapter;
+
+
+    /**
+     * Password Comparator for the app
+     */
+    private final Comparator<Password> TagSizeComparator = new Comparator<Password>() {
+        @Override
+        public int compare(Password p1, Password p2) {
+            return p1.getmTags().size() - p2.getmTags().size();
+        }
+    };
 
     /*
         Create RecyclerView w/ holder for each password
@@ -89,13 +100,15 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         mBinding = DataBindingUtil.setContentView(getActivity(), R.layout.activity_fragment);
 
         // Retrieve data from singleton class
         PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
         List<Password> passwords = passwordDataSource.getPasswords();
 
-        mPasswordAdapter = new PasswordAdapter(passwords);
+        mPasswordAdapter = new PasswordAdapter(passwords, TagSizeComparator);
 
         mBinding.passwordRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.passwordRecyclerView.setAdapter(mPasswordAdapter);
@@ -126,16 +139,6 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
     }
 
     private class PasswordAdapter extends RecyclerView.Adapter<PasswordHolder> {
-
-        /**
-         * Show passwords w/ most tags first
-         */
-        private final Comparator<Password> mComparator = new Comparator<Password>() {
-            @Override
-            public int compare(Password p1, Password p2) {
-                return p1.getmTags().size() - p2.getmTags().size();
-            }
-        };
 
         /**
          * Callback method for SearchView
@@ -189,7 +192,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
                 }
             }
 
-            mSortedList.addAll();
+            mSortedList.addAll(passwords);
             mSortedList.endBatchedUpdates();
         }
 
@@ -223,13 +226,16 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
         }
 
-        public PasswordAdapter(List<Password> passwords) {
+        private Comparator<Password> mComparator;
+
+        public PasswordAdapter(List<Password> passwords, Comparator<Password> comparator) {
             mPasswords = passwords;
+            mComparator = comparator;
         }
 
         @Override
         public void onBindViewHolder(PasswordHolder holder, int position) {
-            Password password = mPasswords.get(position);
+            Password password = mSortedList.get(position);
             holder.bind(password);
 
             // Create a GridView f/ For Tags
@@ -239,7 +245,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
         @Override
         public int getItemCount() {
-            return mPasswords.size();
+            return mSortedList.size();
         }
     }
 
