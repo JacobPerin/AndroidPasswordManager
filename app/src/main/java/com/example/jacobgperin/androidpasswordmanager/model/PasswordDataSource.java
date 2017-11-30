@@ -84,21 +84,27 @@ public class PasswordDataSource {
     }
 
     public Password getPassword(UUID id) {
-        for(Password password : mPasswords) {
-            if(password.getId().equals(id)){
-                return password;
-            }
-        }
-        return null;
+        String selection =PasswordTable.Columns.UUID + " = ?";
+        String[] selectionArgs = { id.toString() };
+
+        ArrayList<Password> passwords = new ArrayList<>();
+        passwords = makeQueries(selection, selectionArgs, passwords);
+
+        return passwords.get(0);
     }
 
     //Gets the passwords into arrayList of Passwords
     public List<Password> getPasswords(){
-        List<Password> passwords = new ArrayList<>();
+        ArrayList<Password> passwords = new ArrayList<>();
+        passwords = makeQueries(null, null, passwords);
 
+        return passwords;
+    }
+
+
+    public ArrayList<Password> makeQueries(String whereClause, String[] whereArgs, ArrayList<Password> passwords){
         //Create password table cursor
-        PasswordCursorWrapper passCursor = queryPasswords(null, null);
-
+        PasswordCursorWrapper passCursor = queryPasswords(whereClause, whereArgs);
 
         try{
             passCursor.moveToFirst();
@@ -127,7 +133,6 @@ public class PasswordDataSource {
 
         return passwords;
     }
-
     private PasswordCursorWrapper queryTags(String id){
         String selection = TagTable.Columns.TAGID + " = ?";
         String[] selectionArgs = { id };
