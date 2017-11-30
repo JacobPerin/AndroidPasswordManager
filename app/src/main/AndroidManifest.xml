@@ -16,7 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.MainActivity" />
         <activity android:name=".controller.AddPassword" />
         <activity android:name=".controller.PreferenceActivity"></activity>
     </application>
