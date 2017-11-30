@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Password {
 
     private UUID mID;
-    private String mPassword;
+    public String mPassword;
     private ArrayList<PasswordTag> mTags;
 
     /**
@@ -39,6 +39,19 @@ public class Password {
             stringTag.add(mTags.get(i).getName());
         }
         return stringTag;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Password password = (Password) o;
+
+        return mID == password.mID &&
+                (mPassword != null ?
+                        mPassword.equals(password.getmPassword()) :
+                        password.getmPassword() == null);
     }
 
     public ArrayList<PasswordTag> getmTagsObject() {

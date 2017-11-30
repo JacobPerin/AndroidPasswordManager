@@ -1,22 +1,28 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.app.Activity;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.util.SortedListAdapterCallback;
 import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.example.jacobgperin.androidpasswordmanager.databinding.ActivityFragmentBinding;
+import com.example.jacobgperin.androidpasswordmanager.databinding.ListItemPasswordBinding;
 import com.example.jacobgperin.androidpasswordmanager.model.Password;
 import com.example.jacobgperin.androidpasswordmanager.model.PasswordDataSource;
 import com.example.jacobgperin.androidpasswordmanager.R;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,8 +30,6 @@ import java.util.List;
  */
 
 public class PasswordListFragment extends Fragment implements SearchView.OnQueryTextListener {
-
-    private RecyclerView mPasswordRecyclerView;
 
     private PasswordAdapter mPasswordAdapter;
 
@@ -48,68 +52,174 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
     }
 
     @Override
-    public boolean onQueryTextChange(String newText) {
-        //TODO :: Filter Logic
-        return false;
+    public boolean onQueryTextChange(String query) {
+        PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
+        final List<Password> filteredPasswordList = filter(passwordDataSource.getPasswords(), query);
+        mPasswordAdapter.replaceAll(filteredPasswordList);
+        mBinding.passwordRecyclerView.scrollToPosition(0);
+        return true;
     }
+
+    private static List<Password> filter(List<Password> passwords, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<Password> filteredPasswordList = new ArrayList<>();
+
+        for(Password password : passwords) {
+            // Break tags into string
+            final String tags = password.getmTags().toString().toLowerCase();
+            // Check if query is contained in set
+            if(tags.contains(query)) {
+                filteredPasswordList.add(password);
+            }
+        }
+
+        return filteredPasswordList;
+    }
+
+    public ActivityFragmentBinding mBinding;
 
     /*
         Create RecyclerView w/ holder for each password
      */
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_password_list, container, false);
+        super.onCreate(savedInstanceState);
 
-        mPasswordRecyclerView = (RecyclerView) view.findViewById(R.id.password_recycler_view);
-        mPasswordRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding = DataBindingUtil.setContentView(getActivity(), R.layout.activity_fragment);
 
-        updateUI();
-
-        return view;
-    }
-
-    /**
-     * Helper method to initialize super adapter for password
-     */
-    private void updateUI() {
-
+        // Retrieve data from singleton class
         PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
         List<Password> passwords = passwordDataSource.getPasswords();
 
         mPasswordAdapter = new PasswordAdapter(passwords);
-        mPasswordRecyclerView.setAdapter(mPasswordAdapter);
+
+        mBinding.passwordRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.passwordRecyclerView.setAdapter(mPasswordAdapter);
+
+        mPasswordAdapter.add(passwords);
     }
+
+
 
     private class PasswordHolder extends RecyclerView.ViewHolder {
 
         private Password mPassword;
-        private TextView mPasswordView;
+        private final ListItemPasswordBinding mBinding;
+
         private GridView mTagsView;
 
-        public PasswordHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.list_item_password, parent, false));
+        public PasswordHolder(ListItemPasswordBinding binding) {
+            super(binding.getRoot());
+            mBinding = binding;
 
-            mPasswordView = (TextView) itemView.findViewById(R.id.password);
             mTagsView = (GridView) itemView.findViewById(R.id.tags);
         }
 
         public void bind(Password password) {
             mPassword = password;
-            mPasswordView.setText(mPassword.getmPassword());
+            mBinding.setPassword(mPassword);
         }
     }
 
     private class PasswordAdapter extends RecyclerView.Adapter<PasswordHolder> {
 
+        /**
+         * Show passwords w/ most tags first
+         */
+        private final Comparator<Password> mComparator = new Comparator<Password>() {
+            @Override
+            public int compare(Password p1, Password p2) {
+                return p1.getmTags().size() - p2.getmTags().size();
+            }
+        };
+
+        /**
+         * Callback method for SearchView
+         */
+        private final SortedList<Password> mSortedList = new SortedList<Password>(Password.class, new SortedList.Callback<Password>() {
+            @Override
+            public void onInserted(int position, int count) {
+                notifyItemRangeInserted(position, count);
+            }
+
+            @Override
+            public void onRemoved(int position, int count) {
+                notifyItemRangeRemoved(position, count);
+            }
+
+            @Override
+            public void onMoved(int fromPosition, int toPosition) {
+                notifyItemMoved(fromPosition, toPosition);
+            }
+
+            @Override
+            public int compare(Password p1, Password p2) {
+                return mComparator.compare(p1, p2);
+            }
+
+            @Override
+            public void onChanged(int position, int count) {
+                notifyItemRangeChanged(position, count);
+            }
+
+            @Override
+            public boolean areContentsTheSame(Password oldItem, Password newItem) {
+                return oldItem.equals(newItem);
+            }
+
+            @Override
+            public boolean areItemsTheSame(Password item1, Password item2) {
+                return item1.getId() == item2.getId();
+            }
+        });
+
+        /*
+        Helper Method for CallBack
+         */
+        public void replaceAll(List<Password> passwords) {
+            mSortedList.beginBatchedUpdates();
+            for(int i = mSortedList.size() - 1; i >= 0; i--) {
+                final Password password = mSortedList.get(i);
+                if(!passwords.contains(password)) {
+                    mSortedList.remove(password);
+                }
+            }
+
+            mSortedList.addAll();
+            mSortedList.endBatchedUpdates();
+        }
+
+        public void add(Password password) {
+            mSortedList.add(password);
+        }
+
+        public void remove(Password password) {
+            mSortedList.remove(password);
+        }
+
+        public void add(List<Password> passwords) {
+            mSortedList.addAll(passwords);
+        }
+
+        public void remove(List<Password> passwords) {
+            mSortedList.beginBatchedUpdates();
+            for (Password password : passwords) {
+                mSortedList.remove(password);
+            }
+            mSortedList.endBatchedUpdates();
+        }
+
         private List<Password> mPasswords;
 
         public PasswordHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            final ListItemPasswordBinding binding = ListItemPasswordBinding.inflate(layoutInflater, parent, false );
+            return new PasswordHolder(binding);
 
-            return new PasswordHolder(layoutInflater, parent);
+
         }
 
         public PasswordAdapter(List<Password> passwords) {
@@ -132,6 +242,9 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         }
     }
 
+    /**
+     * Nested Adapter f/ GridView implementation to hold Tags
+     */
     private class TagAdapter extends BaseAdapter {
 
         private ArrayList<String> mTags;
