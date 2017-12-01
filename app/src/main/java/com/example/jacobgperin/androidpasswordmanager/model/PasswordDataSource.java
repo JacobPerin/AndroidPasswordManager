@@ -80,11 +80,18 @@ public class PasswordDataSource {
         }
     }
 
+
+    public void updatePasswordList(Password password){
+        int i = getPasswordIndex(password.getId());
+        if(i == -1)
+            return;
+        mPasswords.set(i, password);
+    }
     /**
      * Make an update to a password in the DB
      * @param password
      */
-    public void updatePassword(Password password){
+    public void updatePasswordDB(Password password){
 
         String id = password.getId().toString();
         ContentValues values = getPasswordContentValues(password);
@@ -94,6 +101,13 @@ public class PasswordDataSource {
                 new String[] {id + ""});
 
         values.clear();
+
+        mDatabase.delete(TagTable.NAME, TagTable.Columns.TAGID + "=" + password.getId(), null);
+
+        for(int i = 0; i < password.getmTags().size(); i++){
+            values = getTagContentValues(password.getmTagsObject().get(i), password.getId().toString());
+            mDatabase.insert(TagTable.NAME, null, values);
+        }
     }
 
     /**
@@ -109,6 +123,13 @@ public class PasswordDataSource {
         return null;
     }
 
+    public int getPasswordIndex(UUID id){
+        for(int i = 0; i < mPasswords.size(); i++){
+            if(mPasswords.get(i).getId() == id)
+                return i;
+        }
+        return -1;
+    }
     /**
      * Get the passwords
      * @return

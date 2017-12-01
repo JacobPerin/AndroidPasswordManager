@@ -1,10 +1,15 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.content.Intent;
+import android.support.annotation.BoolRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.SingleLineTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,8 +31,25 @@ public class AddPassword extends AppCompatActivity {
 
         //Get Database instance
         data = PasswordDataSource.get(getApplicationContext());
+
+        Button hidePass = (Button) findViewById(R.id.hidePass);
         Button submit = (Button) findViewById(R.id.button);
 
+        hidePass.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                EditText password = (EditText) findViewById(R.id.PasswordInput);
+                CheckBox check = (CheckBox) findViewById(R.id.hidePass);
+                Boolean checked = check.isChecked();
+                if(checked){
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                else{
+                    password.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+                }
+
+            }
+        });
         //Create onClick Listener for users on submit of new password
         submit.setOnClickListener(new View.OnClickListener() {
             @Override

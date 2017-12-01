@@ -3,8 +3,7 @@
     <PreferenceCategory
         android:title="checkBox">
         <CheckBoxPreference
-            android:title="HiddenText"
-            android:summary="***"
-            android:key="Password"/>
+            android:title="Change Theme To Dark"
+            android:key="theme"/>
     </PreferenceCategory>
 </PreferenceScreen>
