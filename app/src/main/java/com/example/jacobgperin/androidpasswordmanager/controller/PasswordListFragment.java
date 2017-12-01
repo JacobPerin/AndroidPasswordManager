@@ -146,7 +146,6 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
         // Update RecyclerView if adapter has been updated
         if(mPasswordAdapter != null && !passwords.isEmpty()){
-
             mPasswordAdapter.add(passwords.get(passwords.size() - 1));
             mPasswordAdapter.notifyDataSetChanged();
         }
@@ -194,23 +193,36 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
             @Override
             public boolean areItemsTheSame(Password item1, Password item2) {
-                return item1.getId() == item2.getId();
+                return item1.getId().equals(item2.getId());
             }
         });
 
-        /*
-        Helper Method for CallBack
-         */
-        void replaceAll(List<Password> passwords) {
-            mSortedList.beginBatchedUpdates();
-            for(int i = mSortedList.size() - 1; i >= 0; i--) {
-                final Password password = mSortedList.get(i);
-                if(!passwords.contains(password)) {
-                    mSortedList.remove(password);
-                }
-            }
-            mSortedList.addAll(passwords);
-            mSortedList.endBatchedUpdates();
+        private Comparator<Password> mComparator;
+
+        PasswordAdapter(Comparator<Password> comparator) {
+            mComparator = comparator;
+        }
+
+        @Override
+        public PasswordHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            final ListItemPasswordBinding binding = ListItemPasswordBinding.inflate(layoutInflater, parent, false );
+            return new PasswordHolder(binding);
+        }
+
+        @Override
+        public void onBindViewHolder(PasswordHolder holder, int position) {
+            Password password = mSortedList.get(position);
+            holder.bind(password);
+
+            // Create a "nested" GridView f/ Tags
+            TagAdapter tagAdapter = new TagAdapter(password.getmTags());
+            holder.mTagsView.setAdapter(tagAdapter);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mSortedList.size();
         }
 
         public void add(Password password) {
@@ -233,33 +245,21 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
             mSortedList.endBatchedUpdates();
         }
 
-
-        public PasswordHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            final ListItemPasswordBinding binding = ListItemPasswordBinding.inflate(layoutInflater, parent, false );
-            return new PasswordHolder(binding);
+        /*
+        Helper Method for CallBack
+        */
+        void replaceAll(List<Password> passwords) {
+            mSortedList.beginBatchedUpdates();
+            for(int i = mSortedList.size() - 1; i >= 0; i--) {
+                final Password password = mSortedList.get(i);
+                if(!passwords.contains(password)) {
+                    mSortedList.remove(password);
+                }
+            }
+            mSortedList.addAll(passwords);
+            mSortedList.endBatchedUpdates();
         }
 
-        private Comparator<Password> mComparator;
-
-        PasswordAdapter(Comparator<Password> comparator) {
-            mComparator = comparator;
-        }
-
-        @Override
-        public void onBindViewHolder(PasswordHolder holder, int position) {
-            Password password = mSortedList.get(position);
-            holder.bind(password);
-
-            // Create a "nested" GridView f/ Tags
-            TagAdapter tagAdapter = new TagAdapter(password.getmTags());
-            holder.mTagsView.setAdapter(tagAdapter);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mSortedList.size();
-        }
     }
 
     /**
