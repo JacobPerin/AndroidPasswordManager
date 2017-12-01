@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,12 @@ public class PasswordFragment extends Fragment{
                 convertView = inflater.inflate(R.layout.gridview_item_tag, null);
 
                 holder.mTagView = (TextView) convertView.findViewById(R.id.tag);
-                holder.mTagView.setTextSize(18);
+
+                holder.mTagView.setGravity(Gravity.CENTER);
+                holder.mTagView.setTextSize(22);
+                holder.mTagView.setTextColor(getResources().getColor(R.color.white));
+
+                holder.mTagView.setBackground(getResources().getDrawable(R.drawable.rounded_corner));
 
                 convertView.setTag(holder);
             } else {
