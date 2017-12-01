@@ -17,19 +17,19 @@ public class PasswordActivity extends SingleFragmentActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
-    }
-
-    @Override
-    protected Fragment createFragment() {
-        return new PasswordFragment();
     }
 
     public static Intent newIntent(Context packageContext, UUID passwordId){
         Intent intent = new Intent(packageContext, PasswordActivity.class);
         intent.putExtra(EXTRA_PASSWORD_ID, passwordId);
         return intent;
+    }
+
+    @Override
+    protected Fragment createFragment() {
+        return new PasswordFragment();
     }
 }

@@ -116,9 +116,10 @@ public class PasswordDataSource {
      * @return
      */
     public Password getPassword(UUID id) {
-        for(int i = 0; i < mPasswords.size(); i++){
-            if(mPasswords.get(i).getId() == id)
-                return mPasswords.get(i);
+        for(Password password : mPasswords) {
+            if(password.getId().equals(id)){
+                return password;
+            }
         }
         return null;
     }
