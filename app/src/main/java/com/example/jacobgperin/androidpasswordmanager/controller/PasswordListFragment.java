@@ -3,8 +3,10 @@ package com.example.jacobgperin.androidpasswordmanager.controller;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.gesture.GestureOverlayView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jacobgperin.androidpasswordmanager.databinding.ActivityFragmentBinding;
 import com.example.jacobgperin.androidpasswordmanager.databinding.ListItemPasswordBinding;
@@ -115,6 +118,22 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         mBinding.passwordRecyclerView.setAdapter(mPasswordAdapter);
 
         mPasswordAdapter.add(passwords);
+
+        RecyclerView mRecyclerView = (getActivity()).findViewById(R.id.password_recycler_view);
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        // do whatever
+                        Toast.makeText(getActivity(), "SHORT CLICK", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+//                        Intent intent = PasswordActivity.newIntent(getActivity(), mPassword.getId());
+//                        startActivity(intent);
+                        //FIXME :: Make intent for correct password
+                        Toast.makeText(getActivity(), "CLICKED", Toast.LENGTH_SHORT).show();
+                    }
+                }));
     }
 
     @Override
@@ -136,28 +155,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
 
 
-    private class PasswordHolder extends RecyclerView.ViewHolder {
-
-        final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
-            public void onLongPress(MotionEvent e) {
-                //Open up new screen w/ more information
-                Intent intent = PasswordActivity.newIntent(getActivity(), mPassword.getId());
-                startActivity(intent);
-            }
-
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
-                //TODO :: show password
-                return super.onSingleTapConfirmed(e);
-            }
-        });
-
-
-
-        public boolean onTouchEvent(MotionEvent event){
-            return gestureDetector.onTouchEvent(event);
-        };
-
+    private class PasswordHolder extends RecyclerView.ViewHolder{
 
         private Password mPassword;
         private final ListItemPasswordBinding mBinding;
@@ -169,7 +167,9 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
             mBinding = binding;
 
             mTagsView = (GridView) itemView.findViewById(R.id.tags);
+
         }
+
 
         public void bind(Password password) {
             mPassword = password;
@@ -289,7 +289,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
     /**
      * Nested Adapter f/ GridView implementation to hold Tags
      */
-    private class TagAdapter extends BaseAdapter {
+    public class TagAdapter extends BaseAdapter {
 
         private ArrayList<String> mTags;
         private Activity mActivity;
