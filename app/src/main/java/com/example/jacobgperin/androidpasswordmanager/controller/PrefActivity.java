@@ -1,5 +1,6 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
+import android.content.Intent;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -32,6 +33,9 @@ public class PrefActivity extends PreferenceActivity {
                     PasswordDataSource data = PasswordDataSource.get(getActivity());
                     data.clearList();
                     data.clearDB();
+                    Intent i = new Intent(getActivity(), PasswordListActivity.class);
+                    i.putExtra("data", 1);
+                    startActivity(i);
                     return false;
                 }
             });

@@ -9,7 +9,7 @@
     <PreferenceCategory
         android:title="checkBox">
         <Preference
-            android:title="@string/toggle"
+            android:title="@string/data"
             android:key="data"/>
     </PreferenceCategory>
 </PreferenceScreen>

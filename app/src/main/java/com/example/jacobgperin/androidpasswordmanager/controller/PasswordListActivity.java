@@ -91,7 +91,10 @@ public class PasswordListActivity extends SingleFragmentActivity{
             }
         }
         else if(toggle){
-
+            
+        }
+        else if(getIntent().getExtras().getInt("data") == 1){
+            recreate();
         }
     }
 

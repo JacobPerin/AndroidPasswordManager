@@ -14,4 +14,5 @@
     <string name="fragment_password_change">Change</string>
     <string name="title_bar">Change title bar to black</string>
     <string name="toggle">Turn password toggle off</string>
+    <string name="data">Clear the list</string>
 </resources>
