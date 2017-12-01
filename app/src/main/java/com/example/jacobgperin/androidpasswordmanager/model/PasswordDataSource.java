@@ -42,20 +42,6 @@ public class PasswordDataSource {
         mPasswords = makeQueries(null, null, mPasswords);
     }
 
-    /**
-     *  DUMMY DATA GENERATOR ***START :: REMOVE THIS ONCE DATABASE IS DONE***
-     */
-
-    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    static SecureRandom rnd = new SecureRandom();
-
-    String randomString( int len ){
-        StringBuilder sb = new StringBuilder( len );
-        for( int i = 0; i < len; i++ )
-            sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
-        return sb.toString();
-    }
-
 
     /**
      * Add a new password to the DB and passwords array list
@@ -101,13 +87,6 @@ public class PasswordDataSource {
                 new String[] {id + ""});
 
         values.clear();
-
-        mDatabase.delete(TagTable.NAME, TagTable.Columns.TAGID + "=" + password.getId(), null);
-
-        for(int i = 0; i < password.getmTags().size(); i++){
-            values = getTagContentValues(password.getmTagsObject().get(i), password.getId().toString());
-            mDatabase.insert(TagTable.NAME, null, values);
-        }
     }
 
     /**

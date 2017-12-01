@@ -31,6 +31,10 @@ public class PasswordFragment extends Fragment{
 
     private TextView mPasswordView;
     private GridView mTagsView;
+    private EditText mNewPasswordView;
+    private Button changeButton;
+    private PasswordDataSource data;
+    private PasswordActivity changePassword;
 
     public Password mPassword;
 
@@ -39,13 +43,17 @@ public class PasswordFragment extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        changePassword = (PasswordActivity) getActivity();
+        data = PasswordDataSource.get(getActivity());
         UUID passwordID = (UUID) getActivity()
                 .getIntent()
                 .getSerializableExtra(PasswordActivity.EXTRA_PASSWORD_ID);
 
-        mPassword = PasswordDataSource
+        mPassword = data
                 .get(getActivity())
                 .getPassword(passwordID);
+
+
     }
 
     @Override
@@ -62,22 +70,13 @@ public class PasswordFragment extends Fragment{
         TagAdapter tagAdapter = new TagAdapter(mPassword.getmTags());
         mTagsView.setAdapter(tagAdapter);
 
+        mNewPasswordView = (EditText) v.findViewById(R.id.ChangePass);
+        changeButton = (Button) v.findViewById(R.id.ChangeButton);
 
-        Button changeButton = (Button) v.findViewById(R.id.Change);
         changeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText passText = (EditText) v.findViewById(R.id.ChangePass);
-
-                String oldPass = mPassword.getmPassword();
-                String newPass = passText.getText().toString();
-                if(newPass == "" || newPass == oldPass)
-                    return;
-                mPassword.setmPassword(newPass);
-                PasswordDataSource.get(getActivity()).updatePasswordDB(mPassword);
-                PasswordDataSource.get(getActivity()).updatePasswordList(mPassword);
-
-
+                changePassword.changePassword(mPassword, mNewPasswordView.getText().toString());
             }
         });
 

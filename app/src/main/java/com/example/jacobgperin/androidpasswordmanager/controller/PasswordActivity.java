@@ -23,11 +23,28 @@ public class PasswordActivity extends SingleFragmentActivity {
 
     public static final String EXTRA_PASSWORD_ID = "PASSWORD";
 
+    private PasswordDataSource data;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
+
+
+
+
+    }
+
+    public void changePassword(Password password, String newPass){
+
+        String oldPass = password.getmPassword();
+        if(newPass == "" || newPass == oldPass)
+            return;
+        password.setmPassword(newPass);
+        PasswordDataSource.get(getApplicationContext()).updatePasswordDB(password);
+        PasswordDataSource.get(getApplicationContext()).updatePasswordList(password);
+        finish();
     }
 
     public static Intent newIntent(Context packageContext, UUID passwordId){
