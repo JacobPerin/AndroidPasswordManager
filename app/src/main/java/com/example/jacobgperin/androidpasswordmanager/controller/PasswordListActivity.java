@@ -9,6 +9,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.example.jacobgperin.androidpasswordmanager.R;
 
@@ -60,6 +61,7 @@ public class PasswordListActivity extends SingleFragmentActivity{
                 break;
             case PREFERENCE:
                 if(requestCode == 1) {
+                    getPreferenceValues();
                 }
                 break;
             default:
@@ -70,9 +72,9 @@ public class PasswordListActivity extends SingleFragmentActivity{
 
     private void getPreferenceValues() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean hidden = sharedPref.getBoolean("hidden", false);
-        if (hidden){
-            //Make Passwords hidden
+        Boolean themeToDark = sharedPref.getBoolean("name", false);
+        if(themeToDark){
+
         }
     }
 
