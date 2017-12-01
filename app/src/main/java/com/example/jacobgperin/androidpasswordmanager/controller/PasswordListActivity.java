@@ -91,7 +91,15 @@ public class PasswordListActivity extends SingleFragmentActivity{
             }
         }
         else if(!themeToDark){
+            ActionBar bar = getSupportActionBar();
+            bar.setBackgroundDrawable(new ColorDrawable(Color.BLUE));
+            Window win = this.getWindow();
+            win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
+            win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                win.setStatusBarColor(this.getResources().getColor(R.color.blue));
+            }
         }
         else if(toggle){
 
