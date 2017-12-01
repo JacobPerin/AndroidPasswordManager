@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.util.SortedListAdapterCallback;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.SingleLineTransformationMethod;
 import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -24,6 +26,8 @@ import com.example.jacobgperin.androidpasswordmanager.databinding.ListItemPasswo
 import com.example.jacobgperin.androidpasswordmanager.model.Password;
 import com.example.jacobgperin.androidpasswordmanager.model.PasswordDataSource;
 import com.example.jacobgperin.androidpasswordmanager.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -124,7 +128,11 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
                 new RecyclerItemClickListener(getActivity(), mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         Password password = mPasswordAdapter.mSortedList.get(position);
-                        Toast.makeText(getActivity(), password.mPassword, Toast.LENGTH_SHORT).show();
+                        TextView tex = (TextView)view.findViewById(R.id.password);
+                        if(tex.getTransformationMethod() == PasswordTransformationMethod.getInstance())
+                            tex.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+                        else
+                            tex.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
