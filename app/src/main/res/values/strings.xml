@@ -4,4 +4,12 @@
     <string name="action_new">Add Password</string>
     <string name="action_preferences">Preferences</string>
     <string name="action_options">Options</string>
+    <string name="add_password">Password</string>
+    <string name="add_password_hint">Enter password here</string>
+    <string name="add_password_toggle">Hide Password</string>
+    <string name="add_tags">Tags</string>
+    <string name="add_tags_hint">Separate Tags with commas</string>
+    <string name="add_submit">Submit</string>
+    <string name="fragment_password_hint">Enter new password</string>
+    <string name="fragment_password_change">Change</string>
 </resources>

@@ -58,7 +58,7 @@ public class Password {
                         password.getmPassword() == null);
     }
 
-    public ArrayList<PasswordTag> getmTagsObject() {
+    ArrayList<PasswordTag> getmTagsObject() {
         return mTags;
     }
 

@@ -1,5 +1,6 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,9 +27,6 @@ import java.util.UUID;
 
 public class PasswordFragment extends Fragment{
 
-    private TextView mPasswordView;
-    private GridView mTagsView;
-
     public Password mPassword;
 
 
@@ -51,22 +49,22 @@ public class PasswordFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_password, container, false);
 
         // Access TextView && Set Text
-        mPasswordView = (TextView) v.findViewById(R.id.password);
+        TextView mPasswordView = (TextView) v.findViewById(R.id.password);
         mPasswordView.setText(mPassword.getmPassword());
 
         // Create a GridView f/ For Tags
-        mTagsView = (GridView)v.findViewById(R.id.tags);
+        GridView mTagsView = (GridView) v.findViewById(R.id.tags);
         TagAdapter tagAdapter = new TagAdapter(mPassword.getmTags());
         mTagsView.setAdapter(tagAdapter);
 
         return v;
     }
 
-    public class TagAdapter extends BaseAdapter {
+    private class TagAdapter extends BaseAdapter {
 
-        public ArrayList<String> mTags;
+        ArrayList<String> mTags;
 
-        public TagAdapter(ArrayList<String> tags) {
+        TagAdapter(ArrayList<String> tags) {
             super();
 
             mTags = tags;
@@ -84,10 +82,12 @@ public class PasswordFragment extends Fragment{
             return 0;
         }
 
-        public class ViewHolder {
-            public TextView mTagView;
+        class ViewHolder {
+            TextView mTagView;
         }
 
+        @SuppressWarnings("deprecation")
+        @SuppressLint("InflateParams")
         public View getView(int position, View convertView, ViewGroup parent) {
 
             final ViewHolder holder;

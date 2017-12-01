@@ -74,9 +74,9 @@ public class AddPassword extends AppCompatActivity {
                 String[] tokens = tagString.split(delim);
 
                 //Create ArrayList of Tags
-                for(int i = 0; i < tokens.length; i++){
+                for (String token : tokens) {
                     PasswordTag passTag = new PasswordTag();
-                    passTag.setName(tokens[i]);
+                    passTag.setName(token);
                     passTag.setmTagID(pass.getId());
                     passwordTags.add(passTag);
                 }

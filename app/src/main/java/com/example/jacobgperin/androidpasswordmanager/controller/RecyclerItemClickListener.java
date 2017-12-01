@@ -1,5 +1,4 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
-
 /**
  * Created by Jacob G. Perin on 11/30/2017.
  */
@@ -11,18 +10,18 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
+class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private OnItemClickListener mListener;
 
-    public interface OnItemClickListener {
+    interface OnItemClickListener {
         public void onItemClick(View view, int position);
 
         public void onLongItemClick(View view, int position);
     }
 
-    GestureDetector mGestureDetector;
+    private GestureDetector mGestureDetector;
 
-    public RecyclerItemClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener listener) {
+    RecyclerItemClickListener(Context context, final RecyclerView recyclerView, OnItemClickListener listener) {
         mListener = listener;
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
