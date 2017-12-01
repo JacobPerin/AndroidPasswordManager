@@ -1,6 +1,7 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 
 import com.example.jacobgperin.androidpasswordmanager.R;
 import com.example.jacobgperin.androidpasswordmanager.model.PasswordDataSource;
+
+import java.util.Locale;
 
 public class PrefActivity extends PreferenceActivity {
 
@@ -27,15 +30,13 @@ public class PrefActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.pref);
 
             Preference pref = findPreference("data");
+            Preference lang = findPreference("lang");
             pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     PasswordDataSource data = PasswordDataSource.get(getActivity());
                     data.clearList();
                     data.clearDB();
-                    Intent i = new Intent(getActivity(), PasswordListActivity.class);
-                    i.putExtra("data", 1);
-                    startActivity(i);
                     return false;
                 }
             });

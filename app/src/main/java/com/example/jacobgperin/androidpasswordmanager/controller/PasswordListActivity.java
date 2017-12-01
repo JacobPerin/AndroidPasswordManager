@@ -90,11 +90,14 @@ public class PasswordListActivity extends SingleFragmentActivity{
                 win.setStatusBarColor(this.getResources().getColor(R.color.black));
             }
         }
+        else if(!themeToDark){
+
+        }
         else if(toggle){
-            
+
         }
         else if(getIntent().getExtras().getInt("data") == 1){
-            recreate();
+
         }
     }
 
