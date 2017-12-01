@@ -1,14 +1,21 @@
 package com.example.jacobgperin.androidpasswordmanager.controller;
 
+import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.*;
 import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SupportActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.jacobgperin.androidpasswordmanager.R;
@@ -60,9 +67,7 @@ public class PasswordListActivity extends SingleFragmentActivity{
                 }
                 break;
             case PREFERENCE:
-                if(requestCode == 1) {
                     getPreferenceValues();
-                }
                 break;
             default:
                 break;
@@ -72,10 +77,21 @@ public class PasswordListActivity extends SingleFragmentActivity{
 
     private void getPreferenceValues() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean themeToDark = sharedPref.getBoolean("name", false);
+        Boolean themeToDark = sharedPref.getBoolean("theme", false);
+        Boolean toggle = sharedPref.getBoolean("toggle", false);
         if(themeToDark){
+            ActionBar bar = getSupportActionBar();
+            bar.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+            Window win = this.getWindow();
+            win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-            recreate();
+            win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                win.setStatusBarColor(this.getResources().getColor(R.color.black));
+            }
+        }
+        else if(toggle){
+
         }
     }
 

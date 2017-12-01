@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="checkBox">
+        android:title="pref">
         <CheckBoxPreference
-            android:title="Change Theme To Dark"
+            android:title="@string/title_bar"
             android:key="theme"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="checkBox">
+        <Preference
+            android:title="@string/toggle"
+            android:key="data"/>
     </PreferenceCategory>
 </PreferenceScreen>

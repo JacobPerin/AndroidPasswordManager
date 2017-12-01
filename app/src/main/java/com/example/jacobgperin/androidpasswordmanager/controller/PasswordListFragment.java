@@ -3,8 +3,11 @@ package com.example.jacobgperin.androidpasswordmanager.controller;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +19,7 @@ import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jacobgperin.androidpasswordmanager.databinding.ActivityFragmentBinding;
 import com.example.jacobgperin.androidpasswordmanager.databinding.ListItemPasswordBinding;
@@ -35,6 +39,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
     public ActivityFragmentBinding mBinding;
     private PasswordAdapter mPasswordAdapter;
+
 
     /**
      *  Initialize SearchView to Filter Tags
@@ -105,17 +110,17 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         mBinding.passwordRecyclerView.setAdapter(mPasswordAdapter);
 
         mPasswordAdapter.add(passwords);
-
+        
         RecyclerView mRecyclerView = (getActivity()).findViewById(R.id.password_recycler_view);
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Password password = mPasswordAdapter.mSortedList.get(position);
-                        TextView tex = (TextView)view.findViewById(R.id.password);
-                        if(tex.getTransformationMethod() == PasswordTransformationMethod.getInstance())
-                            tex.setTransformationMethod(SingleLineTransformationMethod.getInstance());
-                        else
-                            tex.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            Password password = mPasswordAdapter.mSortedList.get(position);
+                            TextView tex = (TextView) view.findViewById(R.id.password);
+                            if (tex.getTransformationMethod() == PasswordTransformationMethod.getInstance())
+                                tex.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+                            else
+                                tex.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -124,6 +129,9 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
                         startActivity(intent);
                     }
                 }));
+
+
+
     }
 
     /**
@@ -145,9 +153,9 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         List<Password> passwords = passwordDataSource.getPasswords();
 
         // Update RecyclerView if adapter has been updated
-        if(mPasswordAdapter != null && !passwords.isEmpty()){
-
-            mPasswordAdapter.add(passwords.get(passwords.size() - 1));
+        if(mPasswordAdapter != null){
+            if(!passwords.isEmpty())
+                mPasswordAdapter.add(passwords.get(passwords.size() - 1));
             mPasswordAdapter.notifyDataSetChanged();
         }
     }

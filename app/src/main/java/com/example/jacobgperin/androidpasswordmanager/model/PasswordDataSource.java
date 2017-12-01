@@ -151,6 +151,14 @@ public class PasswordDataSource {
         return passwords;
     }
 
+    public void clearList(){
+        mPasswords.clear();
+    }
+
+    public void clearDB(){
+        mDatabase.delete(PasswordTable.NAME,null,null);
+        mDatabase.delete(TagTable.NAME,null,null);
+    }
     /**
      *  Return passwords from TagTable.
      * Number of Tags returned based on where clause.

@@ -12,4 +12,6 @@
     <string name="add_submit">Submit</string>
     <string name="fragment_password_hint">Enter new password</string>
     <string name="fragment_password_change">Change</string>
+    <string name="title_bar">Change title bar to black</string>
+    <string name="toggle">Turn password toggle off</string>
 </resources>
