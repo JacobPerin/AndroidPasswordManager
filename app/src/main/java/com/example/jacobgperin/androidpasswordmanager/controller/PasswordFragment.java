@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jacobgperin.androidpasswordmanager.R;
 import com.example.jacobgperin.androidpasswordmanager.model.Password;
@@ -57,6 +60,25 @@ public class PasswordFragment extends Fragment{
         mTagsView = (GridView)v.findViewById(R.id.tags);
         TagAdapter tagAdapter = new TagAdapter(mPassword.getmTags());
         mTagsView.setAdapter(tagAdapter);
+
+
+        Button changeButton = (Button) v.findViewById(R.id.Change);
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText passText = (EditText) v.findViewById(R.id.ChangePass);
+
+                String oldPass = mPassword.getmPassword();
+                String newPass = passText.getText().toString();
+                if(newPass == "" || newPass == oldPass)
+                    return;
+                mPassword.setmPassword(newPass);
+                PasswordDataSource.get(getActivity()).updatePasswordDB(mPassword);
+                PasswordDataSource.get(getActivity()).updatePasswordList(mPassword);
+
+
+            }
+        });
 
         return v;
     }

@@ -75,6 +75,7 @@ public class PasswordListActivity extends SingleFragmentActivity{
         Boolean themeToDark = sharedPref.getBoolean("name", false);
         if(themeToDark){
 
+            recreate();
         }
     }
 
