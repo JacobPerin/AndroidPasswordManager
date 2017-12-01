@@ -77,7 +77,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
             // Break tags into string
             final String tags = password.getmTags().toString().toLowerCase();
             // Check if query is contained in set
-            if(tags.contains(query)) {
+            if(tags.contains(lowerCaseQuery)) {
                 filteredPasswordList.add(password);
             }
         }
@@ -99,7 +99,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         final PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
         List<Password> passwords = passwordDataSource.getPasswords();
 
-        mPasswordAdapter = new PasswordAdapter(passwords, TagSizeComparator);
+        mPasswordAdapter = new PasswordAdapter(TagSizeComparator);
 
         mBinding.passwordRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.passwordRecyclerView.setAdapter(mPasswordAdapter);
@@ -161,7 +161,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         /**
          * Callback method for SearchView
          */
-        final SortedList<Password> mSortedList = new SortedList<Password>(Password.class, new SortedList.Callback<Password>() {
+        final SortedList<Password> mSortedList = new SortedList<>(Password.class, new SortedList.Callback<Password>() {
             @Override
             public void onInserted(int position, int count) {
                 notifyItemRangeInserted(position, count);
@@ -209,7 +209,6 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
                     mSortedList.remove(password);
                 }
             }
-
             mSortedList.addAll(passwords);
             mSortedList.endBatchedUpdates();
         }
@@ -234,7 +233,6 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
             mSortedList.endBatchedUpdates();
         }
 
-        private List<Password> mPasswords;
 
         public PasswordHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
@@ -244,8 +242,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
 
         private Comparator<Password> mComparator;
 
-        PasswordAdapter(List<Password> passwords, Comparator<Password> comparator) {
-            mPasswords = passwords;
+        PasswordAdapter(Comparator<Password> comparator) {
             mComparator = comparator;
         }
 
@@ -255,7 +252,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
             holder.bind(password);
 
             // Create a "nested" GridView f/ Tags
-            TagAdapter tagAdapter = new TagAdapter(getActivity(), password.getmTags());
+            TagAdapter tagAdapter = new TagAdapter(password.getmTags());
             holder.mTagsView.setAdapter(tagAdapter);
         }
 
@@ -296,13 +293,11 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
     private class TagAdapter extends BaseAdapter {
 
         private ArrayList<String> mTags;
-        private Activity mActivity;
 
-        TagAdapter(Activity activity, ArrayList<String> tags) {
+        TagAdapter(ArrayList<String> tags) {
             super();
 
             this.mTags = tags;
-            this.mActivity = activity;
         }
 
         @Override
@@ -324,6 +319,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
             TextView mTagView;
         }
 
+        @SuppressWarnings("deprecation")
         @SuppressLint("InflateParams")
         @Override
         public View getView(int i, View convertView, ViewGroup viewGroup) {

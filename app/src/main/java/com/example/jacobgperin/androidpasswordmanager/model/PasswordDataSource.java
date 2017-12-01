@@ -1,5 +1,6 @@
 package com.example.jacobgperin.androidpasswordmanager.model;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,7 +25,6 @@ public class PasswordDataSource {
     private static PasswordDataSource mPasswordDataSource;
 
     private ArrayList<Password> mPasswords;
-    private Context mContext;
     private SQLiteDatabase mDatabase;
 
     public static PasswordDataSource get(Context context){
@@ -36,7 +36,7 @@ public class PasswordDataSource {
     }
 
     private PasswordDataSource(Context context){
-        mContext = context.getApplicationContext();
+        Context mContext = context.getApplicationContext();
         mDatabase = new PasswordBaseHelper(mContext).getWritableDatabase();
         mPasswords = new ArrayList<>();
         mPasswords = makeQueries(null, null, mPasswords);
@@ -45,7 +45,6 @@ public class PasswordDataSource {
 
     /**
      * Add a new password to the DB and passwords array list
-     * @param password
      */
     public void addPasswordList(Password password) {
         // Add password to the password list
@@ -75,7 +74,6 @@ public class PasswordDataSource {
     }
     /**
      * Make an update to a password in the DB
-     * @param password
      */
     public void updatePasswordDB(Password password){
 
@@ -91,8 +89,6 @@ public class PasswordDataSource {
 
     /**
      * This function retrieves a single password.
-     * @param id
-     * @return
      */
     public Password getPassword(UUID id) {
         for(Password password : mPasswords) {
@@ -103,7 +99,7 @@ public class PasswordDataSource {
         return null;
     }
 
-    public int getPasswordIndex(UUID id){
+    private int getPasswordIndex(UUID id){
         for(int i = 0; i < mPasswords.size(); i++){
             if(mPasswords.get(i).getId() == id)
                 return i;
@@ -112,7 +108,6 @@ public class PasswordDataSource {
     }
     /**
      * Get the passwords
-     * @return
      */
     public List<Password> getPasswords(){
         return mPasswords;
@@ -123,12 +118,8 @@ public class PasswordDataSource {
      * This functions executes queries using the cursor Wrapper
      * and returns a list of passwords from the DB
      * based on the where clause.
-     * @param whereClause
-     * @param whereArgs
-     * @param passwords
-     * @return
      */
-    public ArrayList<Password> makeQueries(String whereClause, String[] whereArgs, ArrayList<Password> passwords){
+    private ArrayList<Password> makeQueries(String whereClause, String[] whereArgs, ArrayList<Password> passwords){
         //Create password table cursor
         PasswordCursorWrapper passCursor = queryPasswords(whereClause, whereArgs);
 
@@ -164,13 +155,11 @@ public class PasswordDataSource {
      *  Return passwords from TagTable.
      * Number of Tags returned based on where clause.
      * Return Cursor wrapper.
-     * @param id
-     * @return
      */
     private PasswordCursorWrapper queryTags(String id){
         String selection = TagTable.Columns.TAGID + " = ?";
         String[] selectionArgs = { id };
-        Cursor cursor = mDatabase.query(
+        @SuppressLint("Recycle") Cursor cursor = mDatabase.query(
                 TagTable.NAME,
                 null,
                 selection,
@@ -187,12 +176,9 @@ public class PasswordDataSource {
      * Return passwords from PasswordTable.
      * Number of passwords returned based on where clause.
      * Return Cursor wrapper.
-     * @param whereClause
-     * @param whereArgs
-     * @return
      */
     private PasswordCursorWrapper queryPasswords(String whereClause, String[] whereArgs){
-        Cursor cursor = mDatabase.query(
+        @SuppressLint("Recycle") Cursor cursor = mDatabase.query(
                 PasswordTable.NAME,
                 null,
                 whereClause,
@@ -207,8 +193,6 @@ public class PasswordDataSource {
 
     /**
      * This function creates Content Values object for PasswordDB
-     * @param password
-     * @return
      */
     private static ContentValues getPasswordContentValues(Password password){
         ContentValues values = new ContentValues();
@@ -220,9 +204,6 @@ public class PasswordDataSource {
 
     /**
      * This function creates Content Values object for TagDB
-     * @param tag
-     * @param id
-     * @return
      */
     private static ContentValues getTagContentValues(PasswordTag tag, String id){
         ContentValues values = new ContentValues();
