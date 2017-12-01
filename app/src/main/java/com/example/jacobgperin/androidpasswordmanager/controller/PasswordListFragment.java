@@ -109,7 +109,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         mBinding = DataBindingUtil.setContentView(getActivity(), R.layout.activity_fragment);
 
         // Retrieve data from singleton class
-        PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
+        final PasswordDataSource passwordDataSource = PasswordDataSource.get(getActivity());
         List<Password> passwords = passwordDataSource.getPasswords();
 
         mPasswordAdapter = new PasswordAdapter(passwords, TagSizeComparator);
@@ -123,15 +123,14 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        // do whatever
-                        Toast.makeText(getActivity(), "SHORT CLICK", Toast.LENGTH_SHORT).show();
+                        Password password = mPasswordAdapter.mSortedList.get(position);
+                        Toast.makeText(getActivity(), password.mPassword, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
-//                        Intent intent = PasswordActivity.newIntent(getActivity(), mPassword.getId());
-//                        startActivity(intent);
-                        //FIXME :: Make intent for correct password
-                        Toast.makeText(getActivity(), "CLICKED", Toast.LENGTH_SHORT).show();
+                        Password password = mPasswordAdapter.mSortedList.get(position);
+                        Intent intent = PasswordActivity.newIntent(getActivity(), password.getId());
+                        startActivity(intent);
                     }
                 }));
     }
@@ -182,7 +181,7 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
         /**
          * Callback method for SearchView
          */
-        private final SortedList<Password> mSortedList = new SortedList<Password>(Password.class, new SortedList.Callback<Password>() {
+        public final SortedList<Password> mSortedList = new SortedList<Password>(Password.class, new SortedList.Callback<Password>() {
             @Override
             public void onInserted(int position, int count) {
                 notifyItemRangeInserted(position, count);
