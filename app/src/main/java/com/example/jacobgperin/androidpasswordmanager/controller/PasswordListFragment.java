@@ -275,6 +275,27 @@ public class PasswordListFragment extends Fragment implements SearchView.OnQuery
             }
             mSortedList.addAll(passwords);
             mSortedList.endBatchedUpdates();
+
+            purge();
+        }
+
+        void purge(){
+            mSortedList.beginBatchedUpdates();
+
+            for(int i = 0; i < mSortedList.size() - 1; i++){
+
+                final Password p1 = mSortedList.get(i);
+
+                for(int j = i + 1; j < mSortedList.size(); j++){
+                    final Password p2 = mSortedList.get(j);
+
+                    if(p1.equals(p2)){
+                        mSortedList.remove(p2);
+                    }
+                }
+            }
+
+            mSortedList.endBatchedUpdates();
         }
 
     }
